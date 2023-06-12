@@ -1,10 +1,11 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import MapGL, { Layer, Map, Source } from "react-map-gl";
 import { circleLayer, heatmapLayer } from "../map-style";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchData } from "../features/data/dataSlice";
 import { Point } from "../features/data/Convert";
+import SearchBar from './SearchBar';
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
@@ -65,6 +66,7 @@ const UberMap = () => {
           </Source>
         )}
       </MapGL>
+      <SearchBar></SearchBar>
     </Box>
   );
 };
