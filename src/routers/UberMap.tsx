@@ -5,7 +5,7 @@ import { circleLayer, heatmapLayer } from "../map-style";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchData } from "../features/data/dataSlice";
 import { Point } from "../features/data/Convert";
-import SearchBar from './SearchBar';
+import SearchBar from "./SearchBar";
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
@@ -18,7 +18,6 @@ const UberMap = () => {
     dispatch(fetchData());
   }, [dispatch]);
 
-
   useEffect(() => {
     const data = {
       type: "FeatureCollection",
@@ -28,46 +27,50 @@ const UberMap = () => {
           name: "urn:ogc:def:crs:OGC:1.3:CRS84",
         },
       },
-      features: points ? points.map((point, index) => ({
-        type: "Feature",
-        properties: {
-          type: point.type,
-          id: point.id,
-          time: point.time,
-          density: point.density,
-          lat: point.lat,
-          lng: point.long,
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [point.long, point.lat],
-        },
-      })) : [],
+      features: points
+        ? points.map((point, index) => ({
+            type: "Feature",
+            properties: {
+              type: point.type,
+              id: point.id,
+              time: point.time,
+              density: point.density,
+              lat: point.lat,
+              lng: point.long,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [point.long, point.lat],
+            },
+          }))
+        : [],
     };
     setData(data);
   }, [points]);
 
   return (
-    <Box mx={0} my={0}>
-      <MapGL
-        initialViewState={{
-          latitude: 40.71,
-          longitude: -74,
-          zoom: 12,
-        }}
-        style={{ width: "100vw", height: "100vh" }}
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        mapboxAccessToken={MAPBOX_TOKEN}
-      >
-        {data && (
-          <Source type="geojson" data={data}>
-            <Layer {...heatmapLayer} />
-            <Layer {...circleLayer} />
-          </Source>
-        )}
-      </MapGL>
-      <SearchBar></SearchBar>
-    </Box>
+    <div className="map-container">
+      <Box mx={0} my={0} className="map-wrapper">
+        <SearchBar />
+        <MapGL
+          initialViewState={{
+            latitude: 40.71,
+            longitude: -74,
+            zoom: 12,
+          }}
+          style={{ width: "100vw", height: "100vh" }}
+          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapboxAccessToken={MAPBOX_TOKEN}
+        >
+          {data && (
+            <Source type="geojson" data={data}>
+              <Layer {...heatmapLayer} />
+              <Layer {...circleLayer} />
+            </Source>
+          )}
+        </MapGL>
+      </Box>
+    </div>
   );
 };
 
