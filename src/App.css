@@ -39,11 +39,13 @@
 }
 
 .search-bar-wrapper {
+  display: flex;
+  align-items: center;
   width: 700px;
   background: #fff;
   position: absolute;
   top: 80px;
-  left:600px;
+  left: 600px;
   right: 0;
   line-height: 24px;
   border-radius: 4px;
@@ -51,16 +53,31 @@
 }
 
 .search-bar {
+  flex: 1;
   font: inherit;
-  width: 100%;
   border: 0;
   background-color: transparent;
   margin: 0;
   height: 50px;
   color: #404040;
   color: rgba(0, 0, 0, 0.75);
-  padding: 6px 45px;
+  padding: 6px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.button-container {
+  margin-left: 100px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.button-container button {
+  background: none;
+  border: none;
+  padding: 0;
 }
