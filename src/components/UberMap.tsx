@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchData } from "../features/data/dataSlice";
 import { Point } from "../features/data/Convert";
 import SearchBar from "./SearchBar";
+import Control from "./Control";
+import Header from "./Header";
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
@@ -29,29 +31,31 @@ const UberMap = () => {
       },
       features: points
         ? points.map((point, index) => ({
-            type: "Feature",
-            properties: {
-              type: point.type,
-              id: point.id,
-              time: point.time,
-              density: point.density,
-              lat: point.lat,
-              lng: point.long,
-            },
-            geometry: {
-              type: "Point",
-              coordinates: [point.long, point.lat],
-            },
-          }))
+          type: "Feature",
+          properties: {
+            type: point.type,
+            id: point.id,
+            time: point.time,
+            density: point.density,
+            lat: point.lat,
+            lng: point.long,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [point.long, point.lat],
+          },
+        }))
         : [],
     };
     setData(data);
   }, [points]);
 
   return (
-    <div className="map-container">
-      <Box mx={0} my={0} className="map-wrapper">
+    <div >
+      <div className="max-w-sm hover:max-w-lg">
+        <Header />
         <SearchBar />
+        <Control />
         <MapGL
           initialViewState={{
             latitude: 40.71,
@@ -69,8 +73,8 @@ const UberMap = () => {
             </Source>
           )}
         </MapGL>
-      </Box>
-    </div>
+      </div>
+    </div >
   );
 };
 
