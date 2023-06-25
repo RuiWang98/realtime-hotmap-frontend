@@ -1,6 +1,6 @@
 import { Box, Container, TextField, Tooltip } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MapGL, { Layer, Map, Source } from "react-map-gl";
+import MapGL, { Layer, Source } from "react-map-gl";
 import { circleLayer, heatmapLayer } from "../map-style";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchData } from "../features/data/dataSlice";
@@ -8,6 +8,7 @@ import { Point } from "../features/data/Convert";
 import SearchBar from "./SearchBar";
 import Control from "./Control";
 import Header from "./Header";
+import RealtimeSlider from "./realtimeSlider";
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
@@ -51,7 +52,7 @@ const UberMap = () => {
   }, [points]);
 
   return (
-    <div >
+    <div style={{ height: "100vh" }}>
       <div className="max-w-sm hover:max-w-lg">
         <Header />
         <SearchBar />
@@ -73,6 +74,8 @@ const UberMap = () => {
             </Source>
           )}
         </MapGL>
+        {/* todo */}
+        {/* <RealtimeSlider />  */}
       </div>
     </div >
   );
