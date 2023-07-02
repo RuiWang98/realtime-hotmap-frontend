@@ -32,20 +32,20 @@ const UberMap = () => {
       },
       features: points
         ? points.map((point, index) => ({
-          type: "Feature",
-          properties: {
-            type: point.type,
-            id: point.id,
-            time: point.time,
-            density: point.density,
-            lat: point.lat,
-            lng: point.long,
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [point.long, point.lat],
-          },
-        }))
+            type: "Feature",
+            properties: {
+              type: point.type,
+              id: point.id,
+              time: point.time,
+              density: point.density,
+              lat: point.lat,
+              lng: point.long,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [point.long, point.lat],
+            },
+          }))
         : [],
     };
     setData(data);
@@ -77,7 +77,7 @@ const UberMap = () => {
         {/* todo */}
         {/* <RealtimeSlider />  */}
       </div>
-    </div >
+    </div>
   );
 };
 

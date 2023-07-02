@@ -17,6 +17,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Point } from "../features/data/Convert";
 import { Divider, Stack } from "@mui/material";
+import RealtimeSlider from "./realtimeSlider";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -75,27 +76,36 @@ const Control = () => {
   };
 
   return (
-    <div className="w-full absolute z-10 bottom-[50px] flex justify-start ml-12">
-      <div>
-        <button
-          className="mr-4 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-          value={0}
-        >
-          Pick-up Map
-        </button>
-        <button
-          className="mr-3 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-          value={1}
-        >
-          Drop-off Map
-        </button>
+    <>
+      <div className="w-full absolute z-10 bottom-[50px] flex justify-start ml-12 gap-10 items-center">
+        <div>
+          <button
+            className="mr-4 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+            value={0}
+          >
+            Pick-up Map
+          </button>
+          <button
+            className="mr-3 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+            value={1}
+          >
+            Drop-off Map
+          </button>
+          <button
+            className="h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+            onClick={handleDialogOpen}
+          >
+            Show Points Information
+          </button>
+        </div>
+
+        <div className="flex-auto">
+          <div className="flex justify-start ml-10">
+            <RealtimeSlider />
+          </div>
+        </div>
       </div>
-      <button
-        className="h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-        onClick={handleDialogOpen}
-      >
-        Show Points Information
-      </button>
+
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -124,12 +134,16 @@ const Control = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>
-                        <Stack direction={"row"} divider={<Divider orientation="vertical" flexItem />} spacing={1}>
-                        <Typography>Time: {point.time}</Typography>
-                        <Typography>Density: {point.density}</Typography>
-                        <Typography>Latitude: {point.lat}</Typography>
-                        <Typography>Longitude: {point.long}</Typography>
-                        <Typography>Type: {point.type}</Typography>
+                        <Stack
+                          direction={"row"}
+                          divider={<Divider orientation="vertical" flexItem />}
+                          spacing={1}
+                        >
+                          <Typography>Time: {point.time}</Typography>
+                          <Typography>Density: {point.density}</Typography>
+                          <Typography>Latitude: {point.lat}</Typography>
+                          <Typography>Longitude: {point.long}</Typography>
+                          <Typography>Type: {point.type}</Typography>
                         </Stack>
                       </Typography>
                     </AccordionDetails>
@@ -144,7 +158,7 @@ const Control = () => {
           </Button>
         </DialogActions>
       </BootstrapDialog>
-    </div>
+    </>
   );
 };
 
