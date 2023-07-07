@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import MapGL, { Layer, Source } from "react-map-gl";
 import { circleLayer, heatmapLayer } from "../map-style";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchData } from "../features/data/dataSlice";
+import {
+  fetchData,
+  setDropoffGeoData,
+  setPickupGeoData,
+} from "../features/data/dataSlice";
 import { Point } from "../features/data/Convert";
 import SearchBar from "./SearchBar";
 import Control from "./Control";
@@ -13,16 +17,27 @@ const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
 const UberMap = () => {
-  const [data, setData] = useState<any>();
+  const pickupData = useAppSelector((state) => state.data.pickupGeoData);
+  const dropoffData = useAppSelector((state) => state.data.dropoffGeoData);
+  const isPickup = useAppSelector((state) => state.data.isPickup);
   const dispatch = useAppDispatch();
   const points = useAppSelector((state) => state.data.points);
 
+  // useEffect(() => {
+  //   dispatch(fetchData());
+  // }, [dispatch]);
+
   useEffect(() => {
-    dispatch(fetchData());
+    const id = setInterval(() => {
+      dispatch(fetchData());
+    }, 10000);
+    console.log("Fetch Data");
+    return () => clearInterval(id);
   }, [dispatch]);
 
   useEffect(() => {
-    const data = {
+    // console.log(points);
+    const pdata = {
       type: "FeatureCollection",
       crs: {
         type: "name",
@@ -34,22 +49,51 @@ const UberMap = () => {
         ? points.map((point, index) => ({
             type: "Feature",
             properties: {
-              type: point.type,
+              // type: point.type,
               id: point.id,
-              time: point.time,
+              // time: point.time,
               density: point.density,
-              lat: point.lat,
-              lng: point.long,
+              // lat: point.lat,
+              // lng: point.long,
             },
             geometry: {
               type: "Point",
-              coordinates: [point.long, point.lat],
+              coordinates: [point.pickup_long, point.pickup_lat],
             },
           }))
         : [],
     };
-    setData(data);
-  }, [points]);
+    // console.log(data);
+    dispatch(setPickupGeoData(pdata));
+
+    const ddata = {
+      type: "FeatureCollection",
+      crs: {
+        type: "name",
+        properties: {
+          name: "urn:ogc:def:crs:OGC:1.3:CRS84",
+        },
+      },
+      features: points
+        ? points.map((point, index) => ({
+            type: "Feature",
+            properties: {
+              // type: point.type,
+              id: point.id,
+              // time: point.time,
+              density: point.density,
+              // lat: point.lat,
+              // lng: point.long,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [point.dropoff_long, point.dropoff_lat],
+            },
+          }))
+        : [],
+    };
+    dispatch(setDropoffGeoData(ddata));
+  }, [points, dispatch]);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -67,8 +111,8 @@ const UberMap = () => {
           mapStyle="mapbox://styles/mapbox/dark-v9"
           mapboxAccessToken={MAPBOX_TOKEN}
         >
-          {data && (
-            <Source type="geojson" data={data}>
+          {(dropoffData || pickupData) && (
+            <Source type="geojson" data={isPickup ? pickupData : dropoffData}>
               <Layer {...heatmapLayer} />
               <Layer {...circleLayer} />
             </Source>

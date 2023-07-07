@@ -49,9 +49,9 @@ export const heatmapLayer: HeatmapLayer = {
       ["linear"],
       ["zoom"],
       11,
-      120,
+      40,
       MAX_ZOOM_LEVEL,
-      200,
+      80,
     ],
 
     "heatmap-opacity": ["interpolate", ["linear"], ["zoom"], 14, 0.8, 15, 0],

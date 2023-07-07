@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchData } from "../features/data/dataSlice";
+import { fetchData, setIsPickup } from "../features/data/dataSlice";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -61,7 +61,6 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 const Control = () => {
   const dispatch = useAppDispatch();
   const points: Point[] = useAppSelector((state) => state.data.points);
-
   React.useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
@@ -82,12 +81,14 @@ const Control = () => {
           <button
             className="mr-4 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
             value={0}
+            onClick={() => dispatch(setIsPickup(true))}
           >
             Pick-up Map
           </button>
           <button
             className="mr-3 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
             value={1}
+            onClick={() => dispatch(setIsPickup(false))}
           >
             Drop-off Map
           </button>
@@ -139,11 +140,11 @@ const Control = () => {
                           divider={<Divider orientation="vertical" flexItem />}
                           spacing={1}
                         >
-                          <Typography>Time: {point.time}</Typography>
+                          {/* <Typography>Time: {point.time}</Typography>
                           <Typography>Density: {point.density}</Typography>
                           <Typography>Latitude: {point.lat}</Typography>
                           <Typography>Longitude: {point.long}</Typography>
-                          <Typography>Type: {point.type}</Typography>
+                          <Typography>Type: {point.type}</Typography> */}
                         </Stack>
                       </Typography>
                     </AccordionDetails>

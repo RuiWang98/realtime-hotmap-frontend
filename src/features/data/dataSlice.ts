@@ -1,13 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 import { act } from "react-dom/test-utils";
-import { Point, Type } from "./Convert";
+import { Point } from "./Convert";
 import { Convert } from "./Convert";
+import { AnyLayer } from "react-map-gl/dist/esm/types";
 
 export interface dataState {
   points: Point[];
   status: "idle" | "loading" | "failed" | "succeeded";
   error: string | null;
+  pickupGeoData: any;
+  dropoffGeoData: any;
+  isPickup: boolean;
 }
 
 const initialState: dataState = {
@@ -55,6 +59,9 @@ const initialState: dataState = {
   ],
   status: "idle",
   error: null,
+  pickupGeoData: {},
+  dropoffGeoData: {},
+  isPickup: true,
 };
 
 export const dataSlice = createSlice({
@@ -63,6 +70,15 @@ export const dataSlice = createSlice({
   reducers: {
     setPoints: (state, action: PayloadAction<Point[]>) => {
       state.points = action.payload;
+    },
+    setPickupGeoData: (state, action: PayloadAction<any>) => {
+      state.pickupGeoData = action.payload;
+    },
+    setDropoffGeoData: (state, action: PayloadAction<any>) => {
+      state.dropoffGeoData = action.payload;
+    },
+    setIsPickup: (state, action: PayloadAction<boolean>) => {
+      state.isPickup = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -80,33 +96,47 @@ export const dataSlice = createSlice({
   },
 });
 
-export const { setPoints } = dataSlice.actions;
+export const { setPoints, setDropoffGeoData, setPickupGeoData, setIsPickup } =
+  dataSlice.actions;
 
 export const fetchData = createAsyncThunk(
   "data/fetchData",
   async (_, { dispatch }) => {
-    const ws = new WebSocket(
-      "wss://realtime-hotmap-backend-dqij5lkaea-uc.a.run.app"
-    );
+    const response = await fetch("http://localhost:8080/api/get");
+    const data = await response.json();
+    // console.log(data);
+    const parsedData: Point[] = Convert.toPoint(data);
+    // console.log(parsedData[0]);
 
-    ws.onopen = () => {
-      console.log("connected");
-    };
-
-    ws.onmessage = (e) => {
-      const parsedData: Point[] = Convert.toPoint(JSON.parse(e.data));
-      // console.log(parsedData);
-      dispatch(setPoints(parsedData));
-    };
-
-    ws.onerror = (e) => {
-      throw new Error("WebSocket error");
-    };
-
-    ws.onclose = (e) => {
-      console.log("WebSocket connection closed");
-    };
+    dispatch(setPoints(parsedData));
   }
 );
+
+// export const fetchData = createAsyncThunk(
+//   "data/fetchData",
+//   async (_, { dispatch }) => {
+//     const ws = new WebSocket(
+//       "wss://realtime-hotmap-backend-dqij5lkaea-uc.a.run.app"
+//     );
+
+//     ws.onopen = () => {
+//       console.log("connected");
+//     };
+
+//     ws.onmessage = (e) => {
+//       const parsedData: Point[] = Convert.toPoint(JSON.parse(e.data));
+//       // console.log(parsedData);
+//       dispatch(setPoints(parsedData));
+//     };
+
+//     ws.onerror = (e) => {
+//       throw new Error("WebSocket error");
+//     };
+
+//     ws.onclose = (e) => {
+//       console.log("WebSocket connection closed");
+//     };
+//   }
+// );
 
 export default dataSlice.reducer;
