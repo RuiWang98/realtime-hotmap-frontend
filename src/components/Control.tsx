@@ -135,17 +135,84 @@ const Control = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>
-                        <Stack
+                        <Stack direction={"column"} spacing={2}>
+                          <Stack
+                            direction={"row"}
+                            divider={
+                              <Divider orientation="vertical" flexItem />
+                            }
+                            spacing={1}
+                          >
+                            <Typography>
+                              Pick-up Time:{" "}
+                              {new Date(
+                                point.pickup_datetime.value
+                              ).toLocaleString()}
+                            </Typography>
+                            <Typography>
+                              Latitude: {point.pickup_lat}
+                            </Typography>
+                            <Typography>
+                              Latitude: {point.pickup_long}
+                            </Typography>
+                          </Stack>
+                          <Stack
+                            direction={"row"}
+                            divider={
+                              <Divider orientation="vertical" flexItem />
+                            }
+                            spacing={1}
+                          >
+                            <Typography>
+                              Drop-off Time:{" "}
+                              {new Date(
+                                point.dropoff_datetime.value
+                              ).toLocaleString()}
+                            </Typography>
+                            <Typography>
+                              Latitude: {point.dropoff_lat}
+                            </Typography>
+                            <Typography>
+                              Latitude: {point.dropoff_long}
+                            </Typography>
+                          </Stack>
+                          <Stack
+                            direction={"row"}
+                            divider={
+                              <Divider orientation="vertical" flexItem />
+                            }
+                            spacing={1}
+                          >
+                            <Typography>Density: {point.density}</Typography>
+                            <Typography>
+                              License: {point.Hvfhs_license_num}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                        {/* <Stack
                           direction={"row"}
                           divider={<Divider orientation="vertical" flexItem />}
                           spacing={1}
                         >
-                          {/* <Typography>Time: {point.time}</Typography>
+                          <Typography>
+                            Pick-up Time:{" "}
+                            {new Date(point.pickup_datetime.value).getDate()}
+                          </Typography>
+                          <Typography>Latitude: {point.pickup_lat}</Typography>
+                          <Typography>Latitude: {point.pickup_long}</Typography>
+                          <Typography>
+                            Drop-off Time:{" "}
+                            {new Date(point.dropoff_datetime.value).getDate()}
+                          </Typography>
+                          <Typography>Latitude: {point.dropoff_lat}</Typography>
+                          <Typography>
+                            Latitude: {point.dropoff_long}
+                          </Typography>
                           <Typography>Density: {point.density}</Typography>
-                          <Typography>Latitude: {point.lat}</Typography>
-                          <Typography>Longitude: {point.long}</Typography>
-                          <Typography>Type: {point.type}</Typography> */}
-                        </Stack>
+                          <Typography>
+                            License: {point.Hvfhs_license_num}
+                          </Typography>
+                        </Stack> */}
                       </Typography>
                     </AccordionDetails>
                   </Accordion>
