@@ -13,6 +13,8 @@ import SearchBar from "./SearchBar";
 import Control from "./Control";
 import Header from "./Header";
 import RealtimeSlider from "./realtimeSlider";
+import Dashboard from "./Dashboard";
+
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
 
@@ -36,7 +38,7 @@ const UberMap = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // console.log(points);
+    console.log(points);
     const pdata = {
       type: "FeatureCollection",
       crs: {
@@ -100,7 +102,9 @@ const UberMap = () => {
       <div className="max-w-sm hover:max-w-lg">
         <Header />
         <SearchBar />
+        <Dashboard />
         <Control />
+        
         <MapGL
           initialViewState={{
             latitude: 40.71,
@@ -118,6 +122,7 @@ const UberMap = () => {
             </Source>
           )}
         </MapGL>
+        
         {/* todo */}
         {/* <RealtimeSlider />  */}
       </div>
