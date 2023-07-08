@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "Control.tsx", "SideBar.tsx"]
+  "include": ["src", "Control.tsx", "SideBar.tsx","Dashboard.tsx"]
 }
