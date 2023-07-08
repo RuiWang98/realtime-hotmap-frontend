@@ -145,9 +145,7 @@ const Control = () => {
                           >
                             <Typography>
                               Pick-up Time:{" "}
-                              {new Date(
-                                point.pickup_datetime.value
-                              ).toLocaleString()}
+                              {point.pickup_datetime.value.toLocaleString()}
                             </Typography>
                             <Typography>
                               Latitude: {point.pickup_lat}
@@ -165,9 +163,7 @@ const Control = () => {
                           >
                             <Typography>
                               Drop-off Time:{" "}
-                              {new Date(
-                                point.dropoff_datetime.value
-                              ).toLocaleString()}
+                              {point.dropoff_datetime.value.toLocaleString()}
                             </Typography>
                             <Typography>
                               Latitude: {point.dropoff_lat}
@@ -189,30 +185,6 @@ const Control = () => {
                             </Typography>
                           </Stack>
                         </Stack>
-                        {/* <Stack
-                          direction={"row"}
-                          divider={<Divider orientation="vertical" flexItem />}
-                          spacing={1}
-                        >
-                          <Typography>
-                            Pick-up Time:{" "}
-                            {new Date(point.pickup_datetime.value).getDate()}
-                          </Typography>
-                          <Typography>Latitude: {point.pickup_lat}</Typography>
-                          <Typography>Latitude: {point.pickup_long}</Typography>
-                          <Typography>
-                            Drop-off Time:{" "}
-                            {new Date(point.dropoff_datetime.value).getDate()}
-                          </Typography>
-                          <Typography>Latitude: {point.dropoff_lat}</Typography>
-                          <Typography>
-                            Latitude: {point.dropoff_long}
-                          </Typography>
-                          <Typography>Density: {point.density}</Typography>
-                          <Typography>
-                            License: {point.Hvfhs_license_num}
-                          </Typography>
-                        </Stack> */}
                       </Typography>
                     </AccordionDetails>
                   </Accordion>

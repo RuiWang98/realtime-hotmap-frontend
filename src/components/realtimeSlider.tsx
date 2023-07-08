@@ -8,30 +8,69 @@ import {
   Typography,
 } from "@mui/material";
 import { PlayArrow, Pause } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { filterPointsByDate } from "../features/data/dataSlice";
+
+export const getDaysSinceEpoch = (date?: Date) => {
+  return date ? Math.floor(date.getTime() / (1000 * 60 * 60 * 24)) : undefined;
+};
 
 const RealtimeSlider = () => {
-  const [value, setValue] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  let timer: NodeJS.Timeout;
+  const [minDate, setMinDate] = useState<number>();
+  const [maxDate, setMaxDate] = useState<number>();
+  const [date, setDate] = useState<number>();
+  const points = useAppSelector((state) => state.data.points);
+  const allPoints = useAppSelector((state) => state.data.allPoints);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (isPlaying) {
+    let timer: NodeJS.Timeout | null = null;
+
+    if (isPlaying && date !== undefined && maxDate !== undefined) {
       timer = setInterval(() => {
-        setValue((currentValue) => currentValue + 1);
+        setDate((currentDate) => {
+          if (currentDate && currentDate < maxDate) {
+            return currentDate + 1;
+          } else {
+            setIsPlaying(false);
+            return currentDate;
+          }
+        });
       }, 1000);
-    } else if (!isPlaying) {
+    } else if (!isPlaying && timer) {
       clearInterval(timer);
+      timer = null;
     }
 
     return () => {
-      clearInterval(timer);
+      if (timer) {
+        clearInterval(timer);
+      }
     };
-  }, [isPlaying]);
+  }, [isPlaying, date, maxDate]);
 
-  const formatDate = (value: number) => {
-    const date = new Date();
-    date.setDate(date.getDate() + value); // Add value to current date
-    return date.toDateString();
+  useEffect(() => {
+    let dates = [
+      ...new Set(allPoints.map((point) => point.pickup_datetime.value)),
+    ];
+    dates.sort();
+    setMinDate(getDaysSinceEpoch(dates[0]));
+    setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));
+    setDate(getDaysSinceEpoch(dates[0]));
+  }, [allPoints]);
+
+  useEffect(() => {
+    date && dispatch(filterPointsByDate(date.toString()));
+  }, [dispatch, date]);
+
+  const handleChange = (event: Event, newValue: number | number[]) => {
+    setDate(newValue as number);
+  };
+
+  const getDateFromEpochDays = (days: number) => {
+    return new Date(days * 24 * 60 * 60 * 1000);
   };
 
   return (
@@ -52,12 +91,16 @@ const RealtimeSlider = () => {
         </ToggleButton>
 
         <Slider
-          min={0}
-          max={100}
-          value={value}
-          onChange={(_, newValue) => setValue(newValue as number)}
+          min={minDate}
+          max={maxDate}
+          step={1}
+          value={date}
+          onChange={handleChange}
+          // valueLabelDisplay="auto"
         />
-        <Typography color={"white"}>{formatDate(value)}</Typography>
+        <Typography width={120} color={"white"}>
+          {date && getDateFromEpochDays(date)?.toISOString().split("T")[0]}
+        </Typography>
       </Stack>
     </Card>
   );
