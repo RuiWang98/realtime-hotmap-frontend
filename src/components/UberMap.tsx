@@ -1,19 +1,16 @@
-import { Box, Container, TextField, Tooltip } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MapGL, { Layer, Source } from "react-map-gl";
-import { circleLayer, heatmapLayer } from "../map-style";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   fetchData,
   setDropoffGeoData,
   setPickupGeoData,
 } from "../features/data/dataSlice";
-import { Point } from "../features/data/Convert";
-import SearchBar from "./SearchBar";
+import { circleLayer, heatmapLayer } from "../map-style";
 import Control from "./Control";
-import Header from "./Header";
-import RealtimeSlider from "./realtimeSlider";
 import Dashboard from "./Dashboard";
+import Header from "./Header";
+import SearchBar from "./SearchBar";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiYmVuamE5OCIsImEiOiJjbGlpYzZuOHUxdHV6M2dwN2M5bXNsZTFrIn0.9aQuvhbH6EifAfRcMX-dug";
@@ -32,13 +29,13 @@ const UberMap = () => {
   useEffect(() => {
     const id = setInterval(() => {
       dispatch(fetchData());
-    }, 10000);
+    }, 2000);
     console.log("Fetch Data");
     return () => clearInterval(id);
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(points);
+    // console.log(points);
     const pdata = {
       type: "FeatureCollection",
       crs: {

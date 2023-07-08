@@ -153,7 +153,7 @@ const Control = () => {
                               Latitude: {point.pickup_lat}
                             </Typography>
                             <Typography>
-                              Latitude: {point.pickup_long}
+                              Longtitute: {point.pickup_long}
                             </Typography>
                           </Stack>
                           <Stack
@@ -171,7 +171,7 @@ const Control = () => {
                               Latitude: {point.dropoff_lat}
                             </Typography>
                             <Typography>
-                              Latitude: {point.dropoff_long}
+                              Longtitute: {point.dropoff_long}
                             </Typography>
                           </Stack>
                           <Stack

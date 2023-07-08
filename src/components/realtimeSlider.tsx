@@ -1,13 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Slider,
-  IconButton,
-  Stack,
-  ToggleButton,
-  Card,
-  Typography,
-} from "@mui/material";
-import { PlayArrow, Pause } from "@mui/icons-material";
+import { Pause, PlayArrow } from "@mui/icons-material";
+import { Card, Slider, Stack, ToggleButton, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { filterPointsByDate } from "../features/data/dataSlice";
 
@@ -22,6 +15,7 @@ const RealtimeSlider = () => {
   const [date, setDate] = useState<number>();
   const points = useAppSelector((state) => state.data.points);
   const allPoints = useAppSelector((state) => state.data.allPoints);
+  const isPickup = useAppSelector((state) => state.data.isPickup);
   const firstRender = useRef<boolean>(true);
 
   const dispatch = useAppDispatch();
@@ -39,7 +33,7 @@ const RealtimeSlider = () => {
             return currentDate;
           }
         });
-      }, 1000);
+      }, 5000);
     } else if (!isPlaying && timer) {
       clearInterval(timer);
       timer = null;
@@ -53,19 +47,30 @@ const RealtimeSlider = () => {
   }, [isPlaying, date, maxDate]);
 
   useEffect(() => {
-    let dates = [...new Set(allPoints.map((point) => point.pickup_datetime))];
-    dates.sort();
+    let dates = [
+      ...new Set(
+        allPoints.map((point) =>
+          isPickup ? point.pickup_datetime : point.dropoff_datetime
+        )
+      ),
+    ];
+    dates.sort((a, b) => a.getTime() - b.getTime());
+
     setMinDate(getDaysSinceEpoch(dates[0]));
     setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));
+    console.log(minDate, maxDate);
     if (minDate && firstRender.current) {
       setDate(getDaysSinceEpoch(dates[0]));
       firstRender.current = false;
     }
-  }, [allPoints]);
+    if (minDate && date && date < minDate) {
+      setDate(getDaysSinceEpoch(dates[0]));
+    }
+  }, [allPoints, isPickup]);
 
   useEffect(() => {
     date && dispatch(filterPointsByDate(date.toString()));
-  }, [dispatch, date]);
+  }, [dispatch, date, allPoints]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setDate(newValue as number);
