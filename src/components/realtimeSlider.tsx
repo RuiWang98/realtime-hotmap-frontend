@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Slider,
   IconButton,
@@ -22,6 +22,7 @@ const RealtimeSlider = () => {
   const [date, setDate] = useState<number>();
   const points = useAppSelector((state) => state.data.points);
   const allPoints = useAppSelector((state) => state.data.allPoints);
+  const firstRender = useRef<boolean>(true);
 
   const dispatch = useAppDispatch();
 
@@ -58,7 +59,10 @@ const RealtimeSlider = () => {
     dates.sort();
     setMinDate(getDaysSinceEpoch(dates[0]));
     setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));
-    setDate(getDaysSinceEpoch(dates[0]));
+    if (minDate && firstRender.current) {
+      setDate(getDaysSinceEpoch(dates[0]));
+      firstRender.current = false;
+    }
   }, [allPoints]);
 
   useEffect(() => {
@@ -94,7 +98,7 @@ const RealtimeSlider = () => {
           min={minDate}
           max={maxDate}
           step={1}
-          value={date}
+          value={date ? date : 0}
           onChange={handleChange}
           // valueLabelDisplay="auto"
         />
