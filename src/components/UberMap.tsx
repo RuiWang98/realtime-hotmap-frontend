@@ -52,7 +52,7 @@ const UberMap = () => {
             type: "Feature",
             properties: {
               // type: point.type,
-              id: point.id,
+              license: point.Hvfhs_license_num,
               // time: point.time,
               density: point.density,
               // lat: point.lat,
@@ -81,7 +81,7 @@ const UberMap = () => {
             type: "Feature",
             properties: {
               // type: point.type,
-              id: point.id,
+              license: point.Hvfhs_license_num,
               // time: point.time,
               density: point.density,
               // lat: point.lat,
@@ -104,7 +104,7 @@ const UberMap = () => {
         <SearchBar />
         <Dashboard />
         <Control />
-        
+
         <MapGL
           initialViewState={{
             latitude: 40.71,
@@ -122,7 +122,7 @@ const UberMap = () => {
             </Source>
           )}
         </MapGL>
-        
+
         {/* todo */}
         {/* <RealtimeSlider />  */}
       </div>

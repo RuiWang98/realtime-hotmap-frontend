@@ -36,10 +36,8 @@ export const dataSlice = createSlice({
     filterPointsByDate: (state, action: PayloadAction<string>) => {
       state.points = state.allPoints.filter((p) =>
         state.isPickup
-          ? getDaysSinceEpoch(p.pickup_datetime.value)?.toString() ===
-            action.payload
-          : getDaysSinceEpoch(p.dropoff_datetime.value)?.toString() ===
-            action.payload
+          ? getDaysSinceEpoch(p.pickup_datetime)?.toString() === action.payload
+          : getDaysSinceEpoch(p.dropoff_datetime)?.toString() === action.payload
       );
     },
     setPickupGeoData: (state, action: PayloadAction<any>) => {
@@ -78,7 +76,9 @@ export const {
 export const fetchData = createAsyncThunk(
   "data/fetchData",
   async (_, { dispatch }) => {
-    const response = await fetch("http://localhost:8080/api/get");
+    const response = await fetch(
+      "https://realtime-hotmap-backend-dqij5lkaea-uc.a.run.app/api/get"
+    );
     const data = await response.json();
     // console.log(data);
     const parsedData: Point[] = Convert.toPoint(data);

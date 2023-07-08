@@ -53,9 +53,7 @@ const RealtimeSlider = () => {
   }, [isPlaying, date, maxDate]);
 
   useEffect(() => {
-    let dates = [
-      ...new Set(allPoints.map((point) => point.pickup_datetime.value)),
-    ];
+    let dates = [...new Set(allPoints.map((point) => point.pickup_datetime))];
     dates.sort();
     setMinDate(getDaysSinceEpoch(dates[0]));
     setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));

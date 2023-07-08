@@ -131,7 +131,9 @@ const Control = () => {
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                     >
-                      <Typography>Point ID {point.id}</Typography>
+                      <Typography>
+                        License: {point.Hvfhs_license_num}
+                      </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>
@@ -145,7 +147,7 @@ const Control = () => {
                           >
                             <Typography>
                               Pick-up Time:{" "}
-                              {point.pickup_datetime.value.toLocaleString()}
+                              {point.pickup_datetime.toLocaleString()}
                             </Typography>
                             <Typography>
                               Latitude: {point.pickup_lat}
@@ -163,7 +165,7 @@ const Control = () => {
                           >
                             <Typography>
                               Drop-off Time:{" "}
-                              {point.dropoff_datetime.value.toLocaleString()}
+                              {point.dropoff_datetime.toLocaleString()}
                             </Typography>
                             <Typography>
                               Latitude: {point.dropoff_lat}

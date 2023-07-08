@@ -61,5 +61,6 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.3.2"
-  }
+  },
+  "proxy": "https://realtime-hotmap-backend-dqij5lkaea-uc.a.run.app"
 }

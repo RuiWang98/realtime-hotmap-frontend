@@ -8,19 +8,14 @@
 // match the expected interface, even if the JSON is valid.
 
 export interface Point {
-  pickup_datetime: Datetime;
-  dropoff_datetime: Datetime;
+  pickup_datetime: Date;
+  dropoff_datetime: Date;
   pickup_lat: number;
   pickup_long: number;
   dropoff_lat: number;
   dropoff_long: number;
-  Hvfhs_license_num: string;
-  id: string;
   density: number;
-}
-
-export interface Datetime {
-  value: Date;
+  Hvfhs_license_num: string;
 }
 
 // Converts JSON strings to/from your types
@@ -220,17 +215,15 @@ function r(name: string) {
 const typeMap: any = {
   Point: o(
     [
-      { json: "pickup_datetime", js: "pickup_datetime", typ: r("Datetime") },
-      { json: "dropoff_datetime", js: "dropoff_datetime", typ: r("Datetime") },
+      { json: "pickup_datetime", js: "pickup_datetime", typ: Date },
+      { json: "dropoff_datetime", js: "dropoff_datetime", typ: Date },
       { json: "pickup_lat", js: "pickup_lat", typ: 3.14 },
       { json: "pickup_long", js: "pickup_long", typ: 3.14 },
       { json: "dropoff_lat", js: "dropoff_lat", typ: 3.14 },
       { json: "dropoff_long", js: "dropoff_long", typ: 3.14 },
-      { json: "Hvfhs_license_num", js: "Hvfhs_license_num", typ: "" },
-      { json: "id", js: "id", typ: "" },
       { json: "density", js: "density", typ: 3.14 },
+      { json: "Hvfhs_license_num", js: "Hvfhs_license_num", typ: "" },
     ],
     false
   ),
-  Datetime: o([{ json: "value", js: "value", typ: Date }], false),
 };
