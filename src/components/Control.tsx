@@ -61,6 +61,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 const Control = () => {
   const dispatch = useAppDispatch();
   const points: Point[] = useAppSelector((state) => state.data.points);
+  const isRealTime = useAppSelector((state) => state.data.isRealTime);
   React.useEffect(() => {
     dispatch(fetchData());
   }, [dispatch]);
@@ -76,14 +77,16 @@ const Control = () => {
 
   return (
     <>
-      <div className="w-full absolute z-10 bottom-[50px] flex justify-start ml-12 gap-10 items-center">
+      <div className="w-full absolute z-10 bottom-[50px] flex justify-start ml-12 gap-10 items-center h-[50px]">
         <ControlButton />
 
-        <div className="flex-auto">
-          <div className="flex justify-start ml-10">
-            <RealtimeSlider />
+        {isRealTime && (
+          <div className="flex-auto">
+            <div className="flex justify-start ml-10">
+              <RealtimeSlider />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <BootstrapDialog

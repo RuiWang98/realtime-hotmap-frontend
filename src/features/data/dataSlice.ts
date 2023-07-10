@@ -14,6 +14,7 @@ export interface dataState {
   pickupGeoData: any;
   dropoffGeoData: any;
   isPickup: boolean;
+  isRealTime: boolean;
 }
 
 const initialState: dataState = {
@@ -24,6 +25,7 @@ const initialState: dataState = {
   pickupGeoData: {},
   dropoffGeoData: {},
   isPickup: true,
+  isRealTime: true,
 };
 
 export const dataSlice = createSlice({
@@ -49,6 +51,9 @@ export const dataSlice = createSlice({
     setIsPickup: (state, action: PayloadAction<boolean>) => {
       state.isPickup = action.payload;
     },
+    setIsRealTime: (state, action: PayloadAction<boolean>) => {
+      state.isRealTime = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,6 +76,7 @@ export const {
   setPickupGeoData,
   setIsPickup,
   filterPointsByDate,
+  setIsRealTime,
 } = dataSlice.actions;
 
 export const fetchData = createAsyncThunk(
