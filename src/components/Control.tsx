@@ -1,22 +1,22 @@
+import CloseIcon from "@mui/icons-material/Close";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Divider, Stack } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
 import * as React from "react";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { fetchData, setIsPickup } from "../features/data/dataSlice";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Point } from "../features/data/Convert";
-import { Divider, Stack } from "@mui/material";
+import { fetchData, setIsPickup } from "../features/data/dataSlice";
 import RealtimeSlider from "./realtimeSlider";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -77,28 +77,7 @@ const Control = () => {
   return (
     <>
       <div className="w-full absolute z-10 bottom-[50px] flex justify-start ml-12 gap-10 items-center">
-        <div>
-          <button
-            className="mr-4 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-            value={0}
-            onClick={() => dispatch(setIsPickup(true))}
-          >
-            Pick-up Map
-          </button>
-          <button
-            className="mr-3 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-            value={1}
-            onClick={() => dispatch(setIsPickup(false))}
-          >
-            Drop-off Map
-          </button>
-          <button
-            className="h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
-            onClick={handleDialogOpen}
-          >
-            Show Points Information
-          </button>
-        </div>
+        <ControlButton />
 
         <div className="flex-auto">
           <div className="flex justify-start ml-10">
@@ -123,9 +102,9 @@ const Control = () => {
         <DialogContent dividers>
           <div>
             {points &&
-              points.map((point) => {
+              points.map((point, i) => {
                 return (
-                  <Accordion>
+                  <Accordion key={i}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
@@ -202,6 +181,33 @@ const Control = () => {
       </BootstrapDialog>
     </>
   );
+
+  function ControlButton() {
+    return (
+      <div>
+        <button
+          className="mr-4 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+          value={0}
+          onClick={() => dispatch(setIsPickup(true))}
+        >
+          Pick-up Map
+        </button>
+        <button
+          className="mr-3 h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+          value={1}
+          onClick={() => dispatch(setIsPickup(false))}
+        >
+          Drop-off Map
+        </button>
+        <button
+          className="h-8 pl-2 pr-4 bg-slate-900 text-slate-100 border-grey-500 bg-opacity-50 border-[1px] text-sm rounded-2xl hover:text-white transition duration-150 ease-in-out shadow hover: border-white hover:bg-opacity-100 hover:bg-slate-800 hover: ml-1 hover:translate-x-0.5 transition-transform duration-150 ease-in-out"
+          onClick={handleDialogOpen}
+        >
+          Show Points Information
+        </button>
+      </div>
+    );
+  }
 };
 
 export default Control;
