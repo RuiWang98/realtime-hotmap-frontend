@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { getDaysSinceEpoch } from "../../components/realtimeSlider";
 import { Convert, Point } from "./Convert";
+import { ConvertBQ, PointBQ } from "./ConvertBQ";
 
 export interface dataState {
   allPoints: Point[];
@@ -130,8 +131,23 @@ export const fetchHistoryData = createAsyncThunk(
 
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
-    const parsedData: Point[] = Convert.toPoint(data);
+    // data.map(el => {...el, pickup_datetime: el.pickup_datetime.value})
+
+    // console.log(data);
+    const parsedBQData: PointBQ[] = ConvertBQ.toPointBQ(data);
+    console.log(parsedBQData);
+    const parsedData: Point[] = parsedBQData.map((item) => {
+      return {
+        pickup_datetime: item.pickup_datetime.value,
+        dropoff_datetime: item.dropoff_datetime.value,
+        pickup_lat: item.pickup_lat,
+        pickup_long: item.pickup_long,
+        dropoff_lat: item.dropoff_lat,
+        dropoff_long: item.dropoff_long,
+        density: item.density,
+        Hvfhs_license_num: item.Hvfhs_license_num,
+      };
+    });
     // console.log(parsedData[0]);
 
     dispatch(setMapPoints(parsedData));
