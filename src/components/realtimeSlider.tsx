@@ -1,12 +1,7 @@
-import { Pause, PlayArrow } from "@mui/icons-material";
-import { Card, Slider, Stack, ToggleButton, Typography } from "@mui/material";
+import { Card, Slider, Stack, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import {
-  filterPointsByDate,
-  filterPointsByTimeInterval,
-} from "../features/data/dataSlice";
-import dayjs from "dayjs";
+import { filterPointsByTimeInterval } from "../features/data/dataSlice";
 
 export const getDaysSinceEpoch = (date?: Date) => {
   return date ? Math.floor(date.getTime() / (1000 * 60 * 60 * 24)) : undefined;
@@ -23,6 +18,7 @@ const RealtimeSlider = () => {
   const firstRender = useRef<boolean>(true);
   const [timeInterval, setTimeInterval] = useState<number>(20);
   const isRealTime = useAppSelector((state) => state.data.isRealTime);
+  const [currTime, setCurrTime] = useState<Date>();
 
   const dispatch = useAppDispatch();
 
@@ -75,6 +71,10 @@ const RealtimeSlider = () => {
   // }, [allPoints, isPickup]);
 
   useEffect(() => {
+    setInterval(() => setCurrTime(new Date()), 1000);
+  }, []);
+
+  useEffect(() => {
     // console.log(allPoints);
     if (isRealTime) {
       dispatch(filterPointsByTimeInterval(timeInterval));
@@ -114,7 +114,7 @@ const RealtimeSlider = () => {
       <Stack
         direction={"row"}
         spacing={2}
-        justifyContent={"flex-start"}
+        justifyContent={"space-evenly"}
         alignItems={"center"}
         width={700}
         height={50}
@@ -133,7 +133,7 @@ const RealtimeSlider = () => {
           Last {timeInterval < 10 ? `0${timeInterval}` : timeInterval} mins
           heatmap{" "}
         </Typography>
-        <Stack direction={"row"} width={300} px={2}>
+        <Stack direction={"row"} width={320} px={2}>
           <Slider
             aria-label="Show type"
             min={5}
@@ -148,8 +148,8 @@ const RealtimeSlider = () => {
           />
         </Stack>
 
-        <Typography width={120} color={"white"}>
-          Now Time : XXXX
+        <Typography width={120} color={"white"} pl={2}>
+          {currTime?.toLocaleString()}
         </Typography>
       </Stack>
     </Card>
