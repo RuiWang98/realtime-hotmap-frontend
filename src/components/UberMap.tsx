@@ -3,9 +3,11 @@ import MapGL, { Layer, Source } from "react-map-gl";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   fetchData,
+  fetchHistoryData,
   setDropoffGeoData,
   setIsRealTime,
   setPickupGeoData,
+  setPoints,
 } from "../features/data/dataSlice";
 import { circleLayer, heatmapLayer } from "../map-style";
 import Control from "./Control";
@@ -37,12 +39,14 @@ const UberMap = () => {
   // }, [dispatch]);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      dispatch(fetchData());
-    }, 2000);
-    console.log("Fetch Data");
-    return () => clearInterval(id);
-  }, [dispatch]);
+    if (isRealTime) {
+      const id = setInterval(() => {
+        dispatch(fetchData());
+      }, 5000);
+      console.log("Fetch Data");
+      return () => clearInterval(id);
+    }
+  }, [dispatch, isRealTime]);
 
   useEffect(() => {
     // console.log(points);
@@ -157,9 +161,23 @@ const SwitchButton = () => {
 
 dayjs.extend(utc);
 const HistoryDatePicker = () => {
-  const [value, setValue] = useState<Dayjs | null>(
-    dayjs.utc("2022-04-17T15:30")
-  );
+  const today = dayjs();
+  const [value, setValue] = useState<Dayjs | null>(today);
+  const dispatch = useAppDispatch();
+  const isRealTime = useAppSelector((state) => state.data.isRealTime);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isRealTime && value && !isOpen) {
+      dispatch(fetchHistoryData(value.toDate()));
+      console.log(value.toDate());
+    }
+  }, [value, isOpen, isRealTime, dispatch]);
+
+  const handleDisbale = (d: Dayjs) => {
+    return d.isAfter(today);
+  };
+
   return (
     <div className="w-full absolute z-10 bottom-[120px] flex justify-start ml-12 gap-10 items-center">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -174,10 +192,14 @@ const HistoryDatePicker = () => {
           <DateTimePicker
             value={value}
             onChange={setValue}
+            onOpen={() => setIsOpen(true)}
+            onClose={() => setIsOpen(false)}
             sx={{ color: "white" }}
+            // shouldDisableDate={handleDisbale}
+            disableFuture
           />
           <Typography>
-            Stored value: {value == null ? "null" : value.format()}
+            Date you chosen: {value == null ? "null" : value.format()}
           </Typography>
         </Stack>
       </LocalizationProvider>

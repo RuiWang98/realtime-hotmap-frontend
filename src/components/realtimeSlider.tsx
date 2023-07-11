@@ -2,7 +2,11 @@ import { Pause, PlayArrow } from "@mui/icons-material";
 import { Card, Slider, Stack, ToggleButton, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { filterPointsByDate } from "../features/data/dataSlice";
+import {
+  filterPointsByDate,
+  filterPointsByTimeInterval,
+} from "../features/data/dataSlice";
+import dayjs from "dayjs";
 
 export const getDaysSinceEpoch = (date?: Date) => {
   return date ? Math.floor(date.getTime() / (1000 * 60 * 60 * 24)) : undefined;
@@ -18,6 +22,7 @@ const RealtimeSlider = () => {
   const isPickup = useAppSelector((state) => state.data.isPickup);
   const firstRender = useRef<boolean>(true);
   const [timeInterval, setTimeInterval] = useState<number>(20);
+  const isRealTime = useAppSelector((state) => state.data.isRealTime);
 
   const dispatch = useAppDispatch();
 
@@ -47,31 +52,34 @@ const RealtimeSlider = () => {
   //   };
   // }, [isPlaying, date, maxDate]);
 
-  useEffect(() => {
-    let dates = [
-      ...new Set(
-        allPoints.map((point) =>
-          isPickup ? point.pickup_datetime : point.dropoff_datetime
-        )
-      ),
-    ];
-    dates.sort((a, b) => a.getTime() - b.getTime());
+  // useEffect(() => {
+  //   let dates = [
+  //     ...new Set(
+  //       allPoints.map((point) =>
+  //         isPickup ? point.pickup_datetime : point.dropoff_datetime
+  //       )
+  //     ),
+  //   ];
+  //   dates.sort((a, b) => a.getTime() - b.getTime());
 
-    setMinDate(getDaysSinceEpoch(dates[0]));
-    setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));
-    console.log(minDate, maxDate);
-    if (minDate && firstRender.current) {
-      setDate(getDaysSinceEpoch(dates[0]));
-      firstRender.current = false;
-    }
-    if (minDate && date && date < minDate) {
-      setDate(getDaysSinceEpoch(dates[0]));
-    }
-  }, [allPoints, isPickup]);
+  //   setMinDate(getDaysSinceEpoch(dates[0]));
+  //   setMaxDate(getDaysSinceEpoch(dates[dates.length - 1]));
+  //   console.log(minDate, maxDate);
+  //   if (minDate && firstRender.current) {
+  //     setDate(getDaysSinceEpoch(dates[0]));
+  //     firstRender.current = false;
+  //   }
+  //   if (minDate && date && date < minDate) {
+  //     setDate(getDaysSinceEpoch(dates[0]));
+  //   }
+  // }, [allPoints, isPickup]);
 
   useEffect(() => {
-    date && dispatch(filterPointsByDate(date.toString()));
-  }, [dispatch, date, allPoints]);
+    // console.log(allPoints);
+    if (isRealTime) {
+      dispatch(filterPointsByTimeInterval(timeInterval));
+    }
+  }, [dispatch, allPoints, isRealTime, timeInterval]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     // setDate(newValue as number);
@@ -141,7 +149,7 @@ const RealtimeSlider = () => {
         </Stack>
 
         <Typography width={120} color={"white"}>
-          {date && getDateFromEpochDays(date)?.toISOString()}
+          Now Time : XXXX
         </Typography>
       </Stack>
     </Card>

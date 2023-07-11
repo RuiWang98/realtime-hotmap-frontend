@@ -3,10 +3,15 @@ import { useAppSelector } from "../app/hooks";
 
 const Dashboard = () => {
   const allPoints = useAppSelector((state) => state.data.allPoints);
-  const distances: number[] = []; 
-  console.log(allPoints);
+  const distances: number[] = [];
+  // console.log(allPoints);
 
-  const calDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const calDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ) => {
     const R = 6371; // km
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -19,26 +24,30 @@ const Dashboard = () => {
         2;
 
     return R * 2 * Math.asin(Math.sqrt(a));
-  }
-  console.log(allPoints);
+  };
+  // console.log(allPoints);
 
   for (let i = 0; i < allPoints.length - 1; i++) {
     const { dropoff_lat, dropoff_long, pickup_lat, pickup_long } = allPoints[i];
-  
+
     const nextPoint = allPoints[i + 1];
-    const { dropoff_lat: nextDropoffLat, dropoff_long: nextDropoffLong, pickup_lat: nextPickupLat, pickup_long: nextPickupLong } = nextPoint;
-  
-    const distance = calDistance(dropoff_lat, dropoff_long, nextDropoffLat, nextDropoffLong) +
+    const {
+      dropoff_lat: nextDropoffLat,
+      dropoff_long: nextDropoffLong,
+      pickup_lat: nextPickupLat,
+      pickup_long: nextPickupLong,
+    } = nextPoint;
+
+    const distance =
+      calDistance(dropoff_lat, dropoff_long, nextDropoffLat, nextDropoffLong) +
       calDistance(pickup_lat, pickup_long, nextPickupLat, nextPickupLong);
-  
+
     distances.push(distance);
   }
 
-  const factor = 10 ** 4; 
+  const factor = 10 ** 4;
   const totalDistance = distances.reduce((acc, distance) => acc + distance, 0);
   const roundedTotalDistance = Math.round(totalDistance * factor) / factor;
-
-
 
   const licenseCount = new Map<string, number>();
   for (const point of allPoints) {
@@ -49,9 +58,9 @@ const Dashboard = () => {
       licenseCount.set(licenseNum, 1);
     }
   }
-  
+
   // Find the license number with the most occurrences
-  let mostCommonLicenseNum = '';
+  let mostCommonLicenseNum = "";
   let mostCommonCount = 0;
   for (const [licenseNum, count] of licenseCount) {
     if (count > mostCommonCount) {
@@ -59,9 +68,9 @@ const Dashboard = () => {
       mostCommonCount = count;
     }
   }
-  
+
   // Find the license number with the least occurrences
-  let leastCommonLicenseNum = '';
+  let leastCommonLicenseNum = "";
   let leastCommonCount = Number.MAX_SAFE_INTEGER;
   for (const [licenseNum, count] of licenseCount) {
     if (count < leastCommonCount) {
@@ -69,7 +78,6 @@ const Dashboard = () => {
       leastCommonCount = count;
     }
   }
-
 
   return (
     <div className="fixed mx-100 bottom-40 right-40 p-4 bg-slate-900 z-50 ">
@@ -84,7 +92,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-
 
 export default Dashboard;
